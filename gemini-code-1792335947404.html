@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Cordexis | منصة الجملة والتصدير الدولية</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-dark: #070d14; --card-bg: #0d1722; --card-border: #1a2938; --gold-primary: #f59e0b; --gold-bright: #fbbf24; --text-white: #ffffff; --text-gray: #94a3b8; --success-green: #10b981; --danger-red: #ef4444; }
+        body.light-mode { --bg-dark: #f1f5f9; --card-bg: #ffffff; --card-border: #cbd5e1; --text-white: #0f172a; --text-gray: #475569; }
+        body { font-family: 'Cairo', sans-serif; background-color: var(--bg-dark); color: var(--text-white); margin: 0; padding-bottom: 90px; direction: rtl; transition: background-color 0.3s, color 0.3s; }
+        html[dir="ltr"] body { direction: ltr; }
+        .announcement-bar { background: linear-gradient(90deg, var(--gold-primary), var(--gold-bright)); color: #000; text-align: center; padding: 8px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 2px 10px rgba(245,158,11,0.2); }
+        header { background: #0b1521; border-bottom: 1px solid var(--card-border); padding: 15px; display: flex; align-items: center; justify-content: space-between; max-width: 650px; margin: 0 auto; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        body.light-mode header { background: rgba(255,255,255,0.9); }
+        .brand-title { color: var(--gold-primary); font-size: 1.3rem; font-weight: 900; margin: 0; }
+        .brand-sub { color: var(--text-gray); font-size: 0.75rem; }
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .theme-toggle-btn, .cart-icon-btn, .lang-toggle-btn { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--gold-primary); padding: 8px 12px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; font-weight: 800; font-size: 0.8rem; font-family: inherit; }
+        .cart-icon-btn { width: 40px; height: 40px; border-radius: 50%; padding: 0; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--danger-red); color: #fff; font-size: 0.7rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        
+        .nav-tabs { display: flex; background: var(--card-bg); border-bottom: 1px solid var(--card-border); max-width: 650px; margin: 0 auto 15px; overflow-x: auto; }
+        .nav-btn { flex: 1; padding: 12px 8px; background: transparent; border: none; color: var(--text-gray); font-weight: 800; font-size: 0.8rem; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; white-space: nowrap; text-align: center; }
+        .nav-btn.active { color: var(--gold-bright); border-bottom-color: var(--gold-primary); background: rgba(245, 158, 11, 0.05); }
+        
+        .container { max-width: 650px; margin: 0 auto; padding: 0 15px; }
+        .page-view { display: none; }
+        .page-view.active { display: block; }
+        
+        .showroom-banner { background: linear-gradient(rgba(7,13,20,0.7), rgba(7,13,20,0.85)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800') center/cover; border: 1px solid var(--card-border); border-radius: 16px; padding: 25px 15px; text-align: center; margin-bottom: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .showroom-banner h2 { color: var(--gold-bright); margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 900; }
+        .showroom-banner p { color: var(--text-gray); font-size: 0.85rem; margin: 0; }
+
+        .search-box { position: relative; margin-bottom: 12px; }
+        .search-box input { width: 100%; padding: 12px 40px 12px 15px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; color: var(--text-white); font-family: inherit; box-sizing: border-box; font-size: 0.9rem; }
+        .search-box i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold-primary); }
+        html[dir="ltr"] .search-box i { right: auto; left: 15px; }
+        html[dir="ltr"] .search-box input { padding: 12px 15px 12px 40px; }
+        
+        .filter-section { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .category-buttons { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+        .btn-cat { background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--text-gray); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .btn-cat.active { background: var(--gold-primary); color: #000; border-color: var(--gold-bright); }
+        
+        .catalog { display: flex; flex-direction: column; gap: 15px; }
+        .card, .trade-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .card-img { width: 100%; height: 210px; object-fit: cover; background: #000; border-radius: 10px; }
+        .title, .trade-title { font-size: 1.15rem; font-weight: 800; color: var(--gold-bright); margin: 10px 0 6px 0; }
+        .specs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        .spec-item { background: var(--bg-dark); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--card-border); font-size: 0.78rem; color: var(--text-gray); }
+        .price-badge { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success-green); padding: 8px; text-align: center; border-radius: 8px; font-weight: 800; margin-bottom: 10px; font-size: 0.95rem; }
+        .product-desc { background: var(--bg-dark); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border); font-size: 0.83rem; color: var(--text-gray); margin-bottom: 10px; line-height: 1.5; }
+        
+        .calc-box { background: var(--bg-dark); padding: 12px; border-radius: 10px; border: 1px solid var(--card-border); margin-bottom: 12px; }
+        .calc-box label { font-size: 0.78rem; color: var(--text-gray); display: block; margin-bottom: 5px; font-weight: 700; }
+        .calc-row { display: flex; gap: 10px; align-items: center; }
+        .calc-box input { flex: 1; padding: 8px; text-align: center; font-weight: 800; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-white); border-radius: 8px; font-family: inherit; }
+        
+        .action-buttons { display: flex; gap: 8px; }
+        .btn-add-cart { flex: 1; background: var(--gold-primary); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; font-size: 0.85rem; }
+        .btn-share { background: var(--bg-dark); border: 1px solid var(--card-border); color: var(--gold-bright); padding: 10px 14px; border-radius: 8px; cursor: pointer; }
+        
+        .shipping-country-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 15px; margin-bottom: 15px; }
+        .shipping-country-title { color: var(--gold-bright); font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        
+        .cart-drawer { position: fixed; top: 0; left: -350px; width: 320px; height: 100%; background: var(--card-bg); border-right: 2px solid var(--gold-primary); z-index: 2000; transition: left 0.3s ease; padding: 15px; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; }
+        html[dir="ltr"] .cart-drawer { left: auto; right: -350px; border-right: none; border-left: 2px solid var(--gold-primary); transition: right 0.3s ease; }
+        .cart-drawer.open { left: 0; }
+        html[dir="ltr"] .cart-drawer.open { right: 0; left: auto; }
+        .cart-items-list { margin: 10px 0; }
+        .cart-item-row { background: var(--bg-dark); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border); margin-bottom: 8px; font-size: 0.82rem; }
+        
+        .drawer-trigger { position: fixed; top: 35%; right: 0; background: var(--gold-primary); color: #000; padding: 10px 8px; border-radius: 10px 0 0 10px; cursor: pointer; z-index: 999; font-weight: 800; font-size: 0.8rem; box-shadow: -2px 2px 10px rgba(0,0,0,0.3); }
+        html[dir="ltr"] .drawer-trigger { right: auto; left: 0; border-radius: 0 10px 10px 0; }
+        .drawer-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.7); display: none; z-index: 1500; }
+        .drawer-content { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--card-bg); border-left: 2px solid var(--gold-primary); z-index: 1600; transition: right 0.3s ease; padding: 15px; box-sizing: border-box; overflow-y: auto; }
+        html[dir="ltr"] .drawer-content { right: auto; left: -320px; border-left: none; border-right: 2px solid var(--gold-primary); transition: left 0.3s ease; }
+        .drawer-content.open { right: 0; }
+        html[dir="ltr"] .drawer-content.open { left: 0; right: auto; }
+        
+        .admin-dashboard { background: var(--card-bg); border: 2px solid var(--gold-primary); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
+        .admin-section { background: var(--bg-dark); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 0.78rem; color: var(--text-gray); margin-bottom: 3px; font-weight: 700; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px; color: var(--text-white); box-sizing: border-box; font-family: inherit; font-size: 0.85rem; }
+        .btn-gold { width: 100%; background: var(--gold-primary); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+        .btn-danger { background: var(--danger-red); color: #fff; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 15px; }
+        .modal-box { background: var(--card-bg); border: 2px solid var(--gold-primary); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .cat-item-row { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 6px 10px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--card-border); }
+        .admin-card-actions { display: none; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--gold-primary); }
+        body.admin-mode .admin-card-actions { display: flex; }
+        
+        .map-box { width: 100%; height: 180px; border-radius: 10px; border: 1px solid var(--card-border); margin-top: 8px; background: #000; }
+    </style>
+</head>
+<body>
+    <div class="announcement-bar"><i class="fa-solid fa-bullhorn"></i> <span id="announcementText">أهلاً بكم في Cordexis - أسعار جملة منافسة وشحن موثوق لكافة الدول!</span></div>
+    
+    <header>
+        <div>
+            <h1 class="brand-title" id="headerBrandTitle">Cordexis</h1>
+            <div class="brand-sub" id="headerBrandSub">بإدارة أبناء الحاج محمود دوارة</div>
+        </div>
+        <div class="header-actions">
+            <!-- زر تغيير اللغة -->
+            <button class="lang-toggle-btn" onclick="toggleLanguage()"><i class="fa-solid fa-globe"></i> <span id="langBtnText">EN</span></button>
+            <button class="cart-icon-btn" onclick="toggleCartDrawer()"><i class="fa-solid fa-cart-shopping"></i><span class="cart-badge" id="cartCount">0</span></button>
+            <button class="theme-toggle-btn" style="width: 40px; height: 40px; border-radius: 50%;" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="themeIcon"></i></button>
+        </div>
+    </header>
+
+    <div class="nav-tabs" id="mainNavTabs"></div>
+
+    <div class="drawer-trigger" id="adminDrawerBtn" onclick="openDrawer()"><i class="fa-solid fa-user-gear"></i> الإدارة</div>
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="drawer-content" id="drawerContent">
+        <h3 style="color: var(--gold-primary); margin-top:0;" id="adminLoginTitle">تسجيل دخول الإدارة</h3>
+        <div id="authSection">
+            <div id="step1"><div class="form-group"><label id="lblAdminEmail">الإيميل:</label><input type="email" id="admin-email"></div><button class="btn-gold" id="btnSendCode" onclick="processStep1()">إرسال الكود</button></div>
+            <div id="step2" style="display:none;"><div class="form-group"><label id="lblVerifyCode">كود التحقق:</label><input type="text" id="admin-code"></div><button class="btn-gold" id="btnConfirmCode" onclick="processStep2()">تأكيد الكود</button></div>
+            <div id="step3" style="display:none;"><div class="form-group"><label id="lblAdminPass">كلمة السر:</label><input type="password" id="admin-pass"></div><button class="btn-gold" id="btnLoginDash" onclick="processStep3()">دخول اللوحة</button></div>
+        </div>
+        <div id="adminQuickNav" style="display:none;">
+            <p style="color:var(--success-green); font-size:0.82rem; font-weight:bold;" id="adminActiveMsg"><i class="fa-solid fa-circle-check"></i> تم تفعيل وضع الأدمن</p>
+            <button class="btn-gold" id="btnFullDashboard" onclick="switchPage('adminPage', null); closeDrawer();">لوحة التحكم الكاملة</button><br><br>
+            <button class="btn-gold btn-danger" id="btnLogoutAdmin" onclick="logoutAdmin()">تسجيل الخروج</button>
+        </div>
+    </div>
+
+    <div class="drawer-overlay" id="cartOverlay" onclick="toggleCartDrawer()"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--card-border); padding-bottom:10px;">
+            <h3 style="color:var(--gold-bright); margin:0;" id="cartDrawerTitle"><i class="fa-solid fa-cart-shopping"></i> سلة الطلبيات والتوصايات</h3>
+            <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:1.2rem; color:var(--text-gray);" onclick="toggleCartDrawer()"></i>
+        </div>
+
+        <div style="background:var(--bg-dark); padding:10px; border-radius:8px; border:1px solid var(--card-border); margin:10px 0;">
+            <div style="font-size:0.8rem; font-weight:bold; color:var(--gold-primary); margin-bottom:5px;" id="traderInfoTitle"><i class="fa-solid fa-user-tag"></i> بيانات التاجر / الزبون:</div>
+            <div class="form-group" style="margin-bottom:6px;"><input type="text" id="customerName" placeholder="اسم التاجر / المسؤول" oninput="saveCustomerInfo()"></div>
+            <div class="form-group" style="margin-bottom:6px;"><input type="text" id="customerShop" placeholder="اسم المحل / الشركة" oninput="saveCustomerInfo()"></div>
+            <div class="form-group" style="margin-bottom:8px;"><input type="text" id="customerCity" placeholder="المدينة / الدولة (مثلاً: بغداد، العراق)" oninput="saveCustomerInfo()"></div>
+            
+            <div style="background: var(--card-bg); border: 1px dashed var(--gold-primary); padding: 8px; border-radius: 6px; text-align: center;">
+                <button type="button" onclick="getLiveLocation()" style="width: 100%; background: var(--gold-primary); color: #000; border: none; padding: 8px; border-radius: 6px; font-weight: 800; cursor: pointer; font-size: 0.8rem; font-family: inherit; margin-bottom:5px;" id="btnGpsAuto">
+                    <i class="fa-solid fa-location-crosshairs"></i> تحديد موقعي (عنوان التوصيل) تلقائياً
+                </button>
+                <div id="gpsStatusText" style="font-size: 0.72rem; color: var(--text-gray); margin-top: 4px;">لم يتم تحديد موقع التوصيل بعد</div>
+                <input type="hidden" id="customerGpsCoords" value="">
+            </div>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList">
+            <p style="text-align:center; color:var(--text-gray); margin-top:20px;" id="emptyCartText">السلة فارغة حالياً</p>
+        </div>
+        
+        <div class="form-group" style="background:var(--bg-dark); padding:10px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:10px;">
+            <label style="color:var(--gold-bright);" id="lblShippingDest"><i class="fa-solid fa-truck-fast"></i> وجهة ومركز الشحن:</label>
+            <select id="selectedShippingDest" style="width:100%; padding:6px; background:var(--card-bg); border:1px solid var(--card-border); color:var(--text-white); border-radius:6px; font-family:inherit; font-size:0.8rem;">
+                <option value="استلام مباشر من مستودعاتنا في سوريا (حلب / دمشق)">استلام مباشر من المستودعات (محلي)</option>
+                <option value="العراق 🇮🇶 - شحن بري تجاري (عبر المعابر الحدودية)">العراق 🇮🇶 (شحن بري تجاري)</option>
+                <option value="لبنان 🇱🇧 - شحن بري سريع ومباشر">لبنان 🇱🇧 (شحن بري سريع)</option>
+                <option value="الأردن والخليج 🇯🇴 🇸🇦 - ترانزيت بري">الأردن والخليج 🇯🇴 🇸🇦 (شحن ترانزيت)</option>
+            </select>
+        </div>
+
+        <div style="border-top:1px solid var(--card-border); padding-top:10px; margin-top:auto;">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:10px; font-size:0.95rem;">
+                <span id="cartTotalLabel">الإجمالي الكلي:</span>
+                <span style="color:var(--gold-bright);">$<span id="cartTotalPrice">0.00</span></span>
+            </div>
+            <button class="btn-gold" id="btnSendWhatsappCart" onclick="sendFullCartToWhatsApp()"><i class="fa-brands fa-whatsapp"></i> إرسال الطلبية وموقعي للواتساب</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="pagesContainer"></div>
+
+        <div id="adminPage" class="page-view">
+            <div class="admin-dashboard">
+                <h3 style="color:var(--gold-bright); margin-top:0;" id="adminDashTitle"><i class="fa-solid fa-screwdriver-wrench"></i> لوحة التحكم والتحرير</h3>
+                
+                <div class="admin-section">
+                    <h4 id="adminCompanyEditTitle"><i class="fa-solid fa-signature"></i> تغيير اسم الشركة والمنشأة</h4>
+                    <div class="form-group"><label id="lblCompanyName">اسم الشركة الرئيسي:</label><input type="text" id="editCompanyName" value="Cordexis"></div>
+                    <div class="form-group"><label id="lblCompanySub">الوصف التحتي:</label><input type="text" id="editCompanySub" value="بإدارة أبناء الحاج محمود دوارة"></div>
+                    <button class="btn-gold" id="btnUpdateCompany" onclick="updateCompanyIdentity()">تحديث اسم الشركة بالموقع</button>
+                </div>
+
+                <!-- تحكم الأدمن الحصري بمواقع المعمل والمستودعات -->
+                <div class="admin-section">
+                    <h4 style="color:var(--gold-bright);"><i class="fa-solid fa-map-location-dot"></i> إدارة وتحكم مواقع المعمل والمستودعات (للأدمن فقط)</h4>
+                    <div class="form-group">
+                        <label>رابط خريطة المعمل الرئيسى (Google Maps Embed URL):</label>
+                        <input type="text" id="editFactoryMap" placeholder="الصق رابط خريطة المعمل هنا">
+                    </div>
+                    <div class="form-group">
+                        <label>رابط خريطة المستودعات (Google Maps Embed URL):</label>
+                        <input type="text" id="editWarehouseMap" placeholder="الصق رابط خريطة المستودعات هنا">
+                    </div>
+                    <button class="btn-gold" onclick="updateFactoryMaps()">حفظ وتحديث خرائط المعمل والمستودعات</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4 id="adminTabsEditTitle"><i class="fa-solid fa-compass"></i> إدارة الأقسام الرئيسية (التبويبات)</h4>
+                    <div class="form-group"><input type="text" id="new-main-tab-name" placeholder="اسم القسم الرئيسي الجديد"></div>
+                    <div class="form-group">
+                        <label id="lblTabContentType">نوع المحتوى بالقسم:</label>
+                        <select id="new-main-tab-type">
+                            <option value="catalog">متجر بيع (مع أسعار وحاسبة كيلو)</option>
+                            <option value="trade">قسم الاستيراد والتصدير (حاويات)</option>
+                            <option value="shipping">دليل الشحن الدولي حسب الدولة</option>
+                            <option value="custom">قسم مخصص ومعمل الشركة (مع خريطة)</option>
+                        </select>
+                    </div>
+                    <button class="btn-gold" id="btnAddTab" onclick="addMainTab()" style="margin-bottom:10px;">إضافة قسم رئيسي جديد</button>
+                    <div id="adminMainTabsList"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4 id="adminAnnounceEditTitle"><i class="fa-solid fa-bullhorn"></i> تعديل الشريط الإعلاني</h4>
+                    <div class="form-group"><input type="text" id="editAnnouncementInput" value="أهلاً بكم في Cordexis - أسعار جملة منافسة وشحن موثوق لكافة الدول!"></div>
+                    <button class="btn-gold" id="btnUpdateAnnounce" onclick="updateAnnouncement()">تحديث الإعلان العلوي</button>
+                </div>
+
+                <div class="admin-section">
+                    <h4 id="adminCatEditTitle"><i class="fa-solid fa-layer-group"></i> إدارة تصنيفات المنتجات الفرعية</h4>
+                    <div class="form-group"><input type="text" id="new-cat-name" placeholder="اسم التصنيف الفرعي الجديد"></div>
+                    <button class="btn-gold" id="btnAddCat" onclick="addCategory()" style="margin-bottom:10px;">إضافة تصنيف فرعي</button>
+                    <div id="adminCatManageList"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h4 id="adminAddProdTitle">إضافة صنف جديد للنظام</h4>
+                    <div class="form-group"><label id="lblTargetTab">القسم الرئيسي:</label><select id="p-target" onchange="togglePriceField(this.value)"></select></div>
+                    <div class="form-group"><label id="lblProdTitle">اسم الصنف:</label><input type="text" id="p-title"></div>
+                    <div class="form-group" id="catSelectBox"><label id="lblSubCat">التصنيف الفرعي:</label><select id="p-cat"></select></div>
+                    <div class="form-group" id="priceGroup"><label id="lblProdPrice">السعر ($ / كغ):</label><input type="number" step="0.01" id="p-price"></div>
+                    <div class="form-group" id="stockGroup"><label id="lblProdStock">المخزون المتاح (كغ):</label><input type="number" id="p-stock"></div>
+                    <div class="form-group"><label id="lblProdSize">المقاس:</label><input type="text" id="p-size"></div>
+                    <div class="form-group"><label id="lblProdColor">اللون:</label><input type="text" id="p-color"></div>
+                    <div class="form-group">
+                        <label id="lblProdImage">صورة المنتج (من المعرض):</label>
+                        <input type="file" accept="image/*" onchange="previewImageFile(this, 'p-media-preview')">
+                        <input type="hidden" id="p-media-base64">
+                        <img id="p-media-preview" src="" style="display:none; width:100%; height:120px; object-fit:cover; margin-top:5px; border-radius:6px;">
+                    </div>
+                    <div class="form-group"><label id="lblProdDesc">الشرح والتفاصيل:</label><textarea id="p-desc" rows="2"></textarea></div>
+                    <button class="btn-gold" id="btnPublishProd" onclick="addNewProduct()">نشر الصنف بالموقع</button>
+                </div>
+                <button class="btn-gold btn-danger" id="btnLogoutAdmin2" onclick="logoutAdmin()">تسجيل الخروج من الإدارة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <h3 style="color:var(--gold-bright); margin-top:0;" id="modalEditTitle">تعديل تفاصيل الصنف</h3>
+            <input type="hidden" id="m-prod-id">
+            <div class="form-group"><label id="lblModalTitle">اسم الصنف:</label><input type="text" id="m-title"></div>
+            <div class="form-group" id="m-price-group"><label id="lblModalPrice">السعر ($ / كغ):</label><input type="number" step="0.01" id="m-price"></div>
+            <div class="form-group" id="m-stock-group"><label id="lblModalStock">المخزون المتاح (كغ):</label><input type="number" id="m-stock"></div>
+            <div class="form-group"><label id="lblModalSize">المقاس:</label><input type="text" id="m-size"></div>
+            <div class="form-group"><label id="lblModalColor">اللون:</label><input type="text" id="m-color"></div>
+            <div class="form-group">
+                <label id="lblModalImg">تغيير الصورة:</label>
+                <input type="file" accept="image/*" onchange="previewImageFile(this, 'm-media-preview')">
+                <input type="hidden" id="m-media-base64">
+                <img id="m-media-preview" src="" style="width:100%; height:120px; object-fit:cover; margin-top:5px; border-radius:6px;">
+            </div>
+            <div class="form-group"><label id="lblModalDesc">الشرح:</label><textarea id="m-desc" rows="2"></textarea></div>
+            <button class="btn-gold" id="btnSaveEdits" onclick="saveProductEdits()">حفظ التعديلات</button>
+            <button class="btn-gold btn-danger" style="margin-top:8px;" id="btnCancelEdits" onclick="closeEditModal()">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        const AUTHORIZED_EMAIL = "ahmaddwara806@gmail.com", ADMIN_PASSWORD = "AhmadD999";
+        let WHOLESALE_PHONE = "963995869501"; 
+        let generatedCode = null, selectedCat = 'all', currentLang = 'ar';
+        let cart = [];
+
+        let factoryMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51590.2312!2d37.1343!3d36.2021!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDEyJzA3LjgiTiAzN8KwMDgnMDMuNSJF!5e0!3m2!1sar!2s!4v1650000000000";
+        let warehouseMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26450.12!2d33.5138!3d36.2765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDMwJzQ5LjciTiAzNsKwMTYnMzUuNCJF!5e0!3m2!1sar!2s!4v1650000000000";
+
+        const i18n = {
+            ar: {
+                title: "Cordexis | منصة الجملة والتصدير الدولية",
+                announcement: "أهلاً بكم في Cordexis - أسعار جملة منافسة وشحن موثوق لكافة الدول!",
+                brandTitle: "Cordexis",
+                brandSub: "بإدارة أبناء الحاج محمود دوارة",
+                adminBtn: "الإدارة",
+                adminTitle: "تسجيل دخول الإدارة",
+                cartTitle: "سلة الطلبيات والتوصايات",
+                traderTitle: "بيانات التاجر / الزبون:",
+                namePlaceholder: "اسم التاجر / المسؤول",
+                shopPlaceholder: "اسم المحل / الشركة",
+                cityPlaceholder: "المدينة / الدولة (مثلاً: بغداد، العراق)",
+                btnGpsAuto: "تحديد موقعي (عنوان التوصيل) تلقائياً",
+                gpsStatusText: "لم يتم تحديد موقع التوصيل بعد",
+                emptyCart: "السلة فارغة حالياً",
+                shippingDestLabel: "وجهة ومركز الشحن:",
+                totalLabel: "الإجمالي الكلي:",
+                sendWhatsapp: "إرسال الطلبية وموقعي للواتساب",
+                searchPlaceholder: "ابحث باسم المنتج، المقاس، أو اللون...",
+                allCat: "الكل",
+                minQtyLabel: "الكمية المطلوبة (أقل حد للطلب 100 كغ):",
+                subTotalLabel: "الإجمالي المبدئي: $",
+                addCartBtn: "إضافة للسلة / توصاي",
+                kgPrice: "/ للكيلو",
+                sizeLabel: "المقاس: ",
+                colorLabel: "اللون: ",
+                stockLabel: "المخزون المتاح: ",
+                kgUnit: " كغ",
+                orderSamples: "طلب عينات واستفسار",
+                exportContact: "التواصل المباشر لقسم التصدير",
+                exportWhatsappBtn: "واتساب قسم التصدير الدولي (0952172658)",
+                factoryTitle: "موقع المعمل الرئيسي",
+                warehouseTitle: "مستودعات الشركة للتسليم والتصدير",
+                factoryDesc: "المنطقة الصناعية - خط الانتاج والتصنيع الأساسي.",
+                warehouseDesc: "مستودعات تجمع الجملة وتجهيز الشحن البري والدولي.",
+                editBtn: "تعديل",
+                deleteBtn: "حذف"
+            },
+            en: {
+                title: "Cordexis | Wholesale & Export Platform",
+                announcement: "Welcome to Cordexis - Competitive Wholesale Prices & Reliable Global Shipping!",
+                brandTitle: "Cordexis",
+                brandSub: "Managed by Haj Mahmoud Sons & Dawara",
+                adminBtn: "Admin",
+                adminTitle: "Admin Portal Login",
+                cartTitle: "Order & Custom Requests Cart",
+                traderTitle: "Merchant / Customer Info:",
+                namePlaceholder: "Merchant / Manager Name",
+                shopPlaceholder: "Shop / Company Name",
+                cityPlaceholder: "City / Country (e.g., Baghdad, Iraq)",
+                btnGpsAuto: "Locate My Delivery Address (GPS)",
+                gpsStatusText: "Delivery location not set yet",
+                emptyCart: "Your cart is currently empty",
+                shippingDestLabel: "Shipping Destination:",
+                totalLabel: "Grand Total:",
+                sendWhatsapp: "Send Order & Location to WhatsApp",
+                searchPlaceholder: "Search by product name, size, or color...",
+                allCat: "All",
+                minQtyLabel: "Requested Qty (Min Order 100 kg):",
+                subTotalLabel: "Estimated Total: $",
+                addCartBtn: "Add to Cart / Request",
+                kgPrice: "/ kg",
+                sizeLabel: "Size: ",
+                colorLabel: "Color: ",
+                stockLabel: "Available Stock: ",
+                kgUnit: " kg",
+                orderSamples: "Inquire & Order Samples",
+                exportContact: "Direct Contact for Export Dept.",
+                exportWhatsappBtn: "WhatsApp International Export (+963 952 172 658)",
+                factoryTitle: "Main Factory Location",
+                warehouseTitle: "Company Delivery & Export Warehouses",
+                factoryDesc: "Industrial Zone - Main Production & Manufacturing Line.",
+                warehouseDesc: "Wholesale Hub & International Overland Shipping Logistics.",
+                editBtn: "Edit",
+                deleteBtn: "Delete"
+            }
+        };
+
+        let mainTabs = [
+            { id: 'catalogPage', name: 'المتجر بالكيلو', nameEn: 'Store (Per Kg)', type: 'catalog', icon: 'fa-boxes-stacked' },
+            { id: 'tradePage', name: 'الاستيراد والتصدير', nameEn: 'Import & Export', type: 'trade', icon: 'fa-plane-ship' },
+            { id: 'shippingPage', name: 'دليل الشحن الدولي', nameEn: 'Shipping Guide', type: 'shipping', icon: 'fa-globe' },
+            { id: 'mapPage', name: 'مواقع المعمل والمستودعات', nameEn: 'Factory & Warehouses', type: 'custom', icon: 'fa-map-location-dot' }
+        ];
+
+        let categories = [
+            { id: 'all', name: 'الكل', nameEn: 'All' }, 
+            { id: 'nylon', name: 'حبال نايلون', nameEn: 'Nylon Ropes' }, 
+            { id: 'flat', name: 'أحزمة مسطحة', nameEn: 'Flat Straps' },
+            { id: 'threads', name: 'خيوط وألياف', nameEn: 'Threads & Yarns' }
+        ];
+
+        let products = [
+            { id: 1, target: 'catalogPage', title: 'حبل نايلون مجدول صناعي', titleEn: 'Braided Industrial Nylon Rope', cat: 'nylon', price: 2.50, stock: 850, size: '8mm', color: 'أصفر / أبيض', colorEn: 'Yellow / White', media: 'https://images.unsplash.com/photo-1605218403815-681966a3d6a0?w=600', desc: 'حبل نايلون عالي المتانة ومقاوم للرطوبة، مناسب للأعمال الصناعية والشحن.', descEn: 'High-durability moisture-resistant nylon rope, suitable for industrial cargo.' },
+            { id: 2, target: 'catalogPage', title: 'حزام ربط مسطح عالي التحمل', titleEn: 'Heavy Duty Flat Cargo Strap', cat: 'flat', price: 3.20, stock: 500, size: '5cm عرض', color: 'أزرق داكن', colorEn: 'Dark Blue', media: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600', desc: 'أحزمة مسطحة متينة لتثبيت البضائع أثناء النقل والشحن البري.', descEn: 'Durable flat straps for securing goods during transit and overland shipping.' },
+            { id: 3, target: 'tradePage', title: 'ألياف وخيوط خيش للتصدير بالجملة', titleEn: 'Jute Yarns & Fibers Bulk Export', cat: 'threads', price: 0, stock: 0, size: 'حسب الطلب', color: 'طبيعي', colorEn: 'Natural', media: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600', desc: 'نوفر ألياف خيش صناعي وأنسجة متينة للتصدير بحاويات كاملة.', descEn: 'We provide synthetic jute fibers and textiles for full container loads.' }
+        ];
+
+        let shippingDestinations = [
+            { country: 'العراق 🇮🇶', countryEn: 'Iraq 🇮🇶', route: 'شحن بري تجاري (عبر المعابر الحدودية ومراكز الشحن في حلب ودمشق)', routeEn: 'Commercial overland freight via border points from Aleppo & Damascus', delivery: 'تصل إلى بغداد، أربيل، والبصرة', deliveryEn: 'Reaches Baghdad, Erbil, and Basra', notes: 'تنسيق الحمولات الكبيرة وحاويات الجملة عبر مكاتب الشحن الدولية المعتمدة.', notesEn: 'Large shipments & wholesale container logistics coordinated via certified shippers.' },
+            { country: 'لبنان 🇱🇧', countryEn: 'Lebanon 🇱🇧', route: 'شحن بري سريع ومباشر عبر الحدود السورية اللبنانية', routeEn: 'Direct fast overland transit via Syrian-Lebanese borders', delivery: 'تصل إلى بيروت، طرابلس، والشويفات', deliveryEn: 'Reaches Beirut, Tripoli, and Choueifat', notes: 'خطوط ترانزيت برية منتظمة للطرود التجارية وحمولات الأنسجة والحبال.', notesEn: 'Regular overland transit lines for commercial textile & rope cargo.' },
+            { country: 'الأردن ودول الخليج 🇯🇴 🇸🇦', countryEn: 'Jordan & Gulf 🇯🇴 🇸🇦', route: 'شحن بري عبر منفذ نصيب الحدودي والشاحنات المجهزة', routeEn: 'Overland transit via Nasib border crossing in equipped trucks', delivery: 'تغطية المراكز التجارية الرئيسية', deliveryEn: 'Covers main commercial hubs', notes: 'تسهيل إجراءات الشحن التجميعي للبضائع الصناعية.', notesEn: 'Streamlined consolidated shipping procedures for industrial goods.' }
+        ];
+
+        window.onload = function() {
+            if(localStorage.getItem('saved_cName')) document.getElementById('customerName').value = localStorage.getItem('saved_cName');
+            if(localStorage.getItem('saved_cShop')) document.getElementById('customerShop').value = localStorage.getItem('saved_cShop');
+            if(localStorage.getItem('saved_cCity')) document.getElementById('customerCity').value = localStorage.getItem('saved_cCity');
+            if(localStorage.getItem('saved_cGps')) {
+                let savedGps = localStorage.getItem('saved_cGps');
+                document.getElementById('customerGpsCoords').value = savedGps;
+                document.getElementById('gpsStatusText').innerText = currentLang === 'ar' ? "تم حفظ موقع التوصيل بنجاح ✅" : "Delivery location saved ✅";
+                document.getElementById('gpsStatusText').style.color = "var(--success-green)";
+            }
+            
+            if(localStorage.getItem('company_name')) {
+                let cName = localStorage.getItem('company_name');
+                document.getElementById('headerBrandTitle').innerText = cName;
+                document.getElementById('editCompanyName').value = cName;
+            }
+            if(localStorage.getItem('company_sub')) {
+                let cSub = localStorage.getItem('company_sub');
+                document.getElementById('headerBrandSub').innerText = cSub;
+                document.getElementById('editCompanySub').value = cSub;
+            }
+            if(localStorage.getItem('factory_map')) {
+                factoryMapUrl = localStorage.getItem('factory_map');
+            }
+            if(localStorage.getItem('warehouse_map')) {
+                warehouseMapUrl = localStorage.getItem('warehouse_map');
+            }
+            if(document.getElementById('editFactoryMap')) document.getElementById('editFactoryMap').value = factoryMapUrl;
+            if(document.getElementById('editWarehouseMap')) document.getElementById('editWarehouseMap').value = warehouseMapUrl;
+
+            renderApp();
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+            document.documentElement.setAttribute('lang', currentLang);
+            document.getElementById('langBtnText').innerText = currentLang === 'ar' ? 'EN' : 'العربية';
+            
+            let txt = i18n[currentLang];
+            document.getElementById('pageTitle').innerText = txt.title;
+            document.getElementById('announcementText').innerText = txt.announcement;
+            if(!localStorage.getItem('company_name')) document.getElementById('headerBrandTitle').innerText = txt.brandTitle;
+            if(!localStorage.getItem('company_sub')) document.getElementById('headerBrandSub').innerText = txt.brandSub;
+            
+            document.getElementById('adminDrawerBtn').innerHTML = `<i class="fa-solid fa-user-gear"></i> ${txt.adminBtn}`;
+            document.getElementById('adminLoginTitle').innerText = txt.adminTitle;
+            document.getElementById('cartDrawerTitle').innerHTML = `<i class="fa-solid fa-cart-shopping"></i> ${txt.cartTitle}`;
+            document.getElementById('traderInfoTitle').innerHTML = `<i class="fa-solid fa-user-tag"></i> ${txt.traderTitle}`;
+            
+            document.getElementById('customerName').placeholder = txt.namePlaceholder;
+            document.getElementById('customerShop').placeholder = txt.shopPlaceholder;
+            document.getElementById('customerCity').placeholder = txt.cityPlaceholder;
+            document.getElementById('btnGpsAuto').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> ${txt.btnGpsAuto}`;
+            document.getElementById('gpsStatusText').innerText = txt.gpsStatusText;
+            document.getElementById('emptyCartText').innerText = txt.emptyCart;
+            document.getElementById('lblShippingDest').innerHTML = `<i class="fa-solid fa-truck-fast"></i> ${txt.shippingDestLabel}`;
+            document.getElementById('cartTotalLabel').innerText = txt.totalLabel;
+            document.getElementById('btnSendWhatsappCart').innerHTML = `<i class="fa-brands fa-whatsapp"></i> ${txt.sendWhatsapp}`;
+
+            renderApp();
+        }
+
+        function saveCustomerInfo() {
+            localStorage.setItem('saved_cName', document.getElementById('customerName').value);
+            localStorage.setItem('saved_cShop', document.getElementById('customerShop').value);
+            localStorage.setItem('saved_cCity', document.getElementById('customerCity').value);
+        }
+
+        function getLiveLocation() {
+            let statusEl = document.getElementById('gpsStatusText');
+            if (navigator.geolocation) {
+                statusEl.innerText = currentLang === 'ar' ? "جاري تحديد عنوان التوصيل..." : "Getting delivery address...";
+                statusEl.style.color = "var(--gold-bright)";
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        let lat = position.coords.latitude;
+                        let lon = position.coords.longitude;
+                        let mapsUrl = `https://maps.google.com/?q=${lat},${lon}`;
+                        
+                        document.getElementById('customerGpsCoords').value = mapsUrl;
+                        localStorage.setItem('saved_cGps', mapsUrl);
+                        
+                        statusEl.innerText = currentLang === 'ar' ? "تم تحديد عنوانك بنجاح ✅" : "Delivery location pinned ✅";
+                        statusEl.style.color = "var(--success-green)";
+                        alert(currentLang === 'ar' ? 'تم تحديد عنوان التوصيل الخاص بك بنجاح!' : 'Your delivery location was captured successfully!');
+                    },
+                    (error) => {
+                        statusEl.innerText = currentLang === 'ar' ? "تعذر تحديد الموقع تلقائياً." : "Could not retrieve location.";
+                        statusEl.style.color = "var(--danger-red)";
+                        alert(currentLang === 'ar' ? 'يرجى السماح للمتصفح بالوصول للموقع الجغرافي.' : 'Please allow location permission in your browser.');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            } else {
+                alert(currentLang === 'ar' ? 'المتصفح لا يدعم تحديد الموقع.' : 'Geolocation is not supported.');
+            }
+        }
+
+        function updateCompanyIdentity() {
+            let n = document.getElementById('editCompanyName').value.trim();
+            let s = document.getElementById('editCompanySub').value.trim();
+            if(n) {
+                localStorage.setItem('company_name', n);
+                document.getElementById('headerBrandTitle').innerText = n;
+            }
+            if(s) {
+                localStorage.setItem('company_sub', s);
+                document.getElementById('headerBrandSub').innerText = s;
+            }
+            alert(currentLang === 'ar' ? 'تم تحديث اسم الشركة وهويتها بنجاح!' : 'Company identity updated!');
+        }
+
+        function updateFactoryMaps() {
+            let fMap = document.getElementById('editFactoryMap').value.trim();
+            let wMap = document.getElementById('editWarehouseMap').value.trim();
+            if(fMap) { factoryMapUrl = fMap; localStorage.setItem('factory_map', fMap); }
+            if(wMap) { warehouseMapUrl = wMap; localStorage.setItem('warehouse_map', wMap); }
+            renderApp();
+            alert(currentLang === 'ar' ? 'تم تحديث مواقع الخرائط للمعمل والمستودعات بنجاح!' : 'Factory and warehouse maps updated!');
+        }
+
+        function previewImageFile(inputEl, previewImgId) {
+            let file = inputEl.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewImgId).src = e.target.result;
+                    document.getElementById(previewImgId).style.display = 'block';
+                    if (previewImgId === 'p-media-preview') document.getElementById('p-media-base64').value = e.target.result;
+                    else document.getElementById('m-media-base64').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function toggleTheme() { document.body.classList.toggle('light-mode'); }
+        
+        function shareProduct(title) {
+            let shareText = `Check product: ${title} - ${window.location.href}`;
+            if (navigator.share) { navigator.share({ title: 'Cordexis', text: shareText }).catch(() => {}); }
+            else {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert(currentLang === 'ar' ? 'تم نسخ رابط الصنف بنجاح!' : 'Product link copied!');
+                }).catch(() => { prompt('Copy link:', shareText); });
+            }
+        }
+
+        function switchPage(pageId, btnEl) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            let targetView = document.getElementById(pageId);
+            if(targetView) targetView.classList.add('active');
+            if(btnEl) { document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); btnEl.classList.add('active'); }
+        }
+
+        function openDrawer() { document.getElementById('drawerOverlay').style.display = 'block'; document.getElementById('drawerContent').classList.add('open'); }
+        function closeDrawer() { document.getElementById('drawerOverlay').style.display = 'none'; document.getElementById('drawerContent').classList.remove('open'); }
+
+        function toggleCartDrawer() {
+            let overlay = document.getElementById('cartOverlay'), drawer = document.getElementById('cartDrawer');
+            if (drawer.classList.contains('open')) { drawer.classList.remove('open'); overlay.style.display = 'none'; }
+            else { drawer.classList.add('open'); overlay.style.display = 'block'; }
+        }
+
+        function addToCart(id, title, price, stock, inputId) {
+            let qty = parseFloat(document.getElementById(inputId).value) || 100;
+            let existingItem = cart.find(item => item.id === id);
+            let totalRequested = existingItem ? existingItem.qty + qty : qty;
+            let isPreOrder = totalRequested > stock && stock > 0;
+
+            if (existingItem) { existingItem.qty += qty; existingItem.isPreOrder = isPreOrder; }
+            else { cart.push({ id: id, title: title, price: price, qty: qty, stock: stock, isPreOrder: isPreOrder }); }
+            
+            updateCartUI();
+            alert(currentLang === 'ar' ? 'تم إضافة الصنف إلى السلة بنجاح!' : 'Added to cart successfully!');
+        }
+
+        function updateCartUI() {
+            let list = document.getElementById('cartItemsList'), countBadge = document.getElementById('cartCount'), totalSpan = document.getElementById('cartTotalPrice');
+            let txt = i18n[currentLang];
+            list.innerHTML = '';
+            let totalCount = 0, totalPrice = 0;
+
+            if (cart.length === 0) {
+                list.innerHTML = `<p style="text-align:center; color:var(--text-gray); margin-top:20px;">${txt.emptyCart}</p>`;
+            } else {
+                cart.forEach((item, index) => {
+                    totalCount += item.qty;
+                    let itemTotal = item.qty * item.price;
+                    totalPrice += itemTotal;
+                    let row = document.createElement('div'); row.className = 'cart-item-row';
+                    row.innerHTML = `
+                        <div style="font-weight:bold; color:var(--gold-bright);">${item.title}</div>
+                        <div>${currentLang === 'ar' ? 'الكمية' : 'Qty'}: ${item.qty} ${txt.kgUnit} | ${currentLang === 'ar' ? 'السعر' : 'Price'}: $${item.price}</div>
+                        ${item.isPreOrder ? `<div style="color:var(--gold-primary); font-size:0.75rem; font-weight:bold; margin-top:2px;">⚠️ ${currentLang === 'ar' ? 'طلبية كبرى (توصاية خاصة تتطلب مدة تجهيز)' : 'Bulk Request (Requires preparation time)'}</div>` : ''}
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+                            <span>${currentLang === 'ar' ? 'الإجمالي' : 'Total'}: <b>$${itemTotal.toFixed(2)}</b></span>
+                            <button onclick="removeFromCart(${index})" style="background:var(--danger-red); color:#fff; border:none; padding:2px 6px; border-radius:4px; cursor:pointer;">${txt.deleteBtn}</button>
+                        </div>
+                    `;
+                    list.appendChild(row);
+                });
+            }
+            countBadge.innerText = cart.length;
+            totalSpan.innerText = totalPrice.toFixed(2);
+        }
+
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
+
+        function sendFullCartToWhatsApp() {
+            if (cart.length === 0) { alert(i18n[currentLang].emptyCart); return; }
+            let cName = document.getElementById('customerName').value.trim() || 'N/A';
+            let cShop = document.getElementById('customerShop').value.trim() || 'N/A';
+            let cCity = document.getElementById('customerCity').value.trim() || 'N/A';
+            let cGps = document.getElementById('customerGpsCoords').value.trim() || 'لم يحدد موقع التوصيل';
+            let chosenShipping = document.getElementById('selectedShippingDest').value;
+
+            let message = `Hello, I'd like to place the following wholesale order:\n\n`;
+            message += `👤 *Customer Details:*\n- Manager: ${cName}\n- Shop/Co: ${cShop}\n- City: ${cCity}\n- Delivery GPS Location: ${cGps}\n\n`;
+            message += `📦 *Order Items:*\n`;
+            
+            let grandTotal = 0;
+            cart.forEach((item, i) => {
+                let sub = item.qty * item.price;
+                grandTotal += sub;
+                message += `${i+1}. *${item.title}*\n   - Qty: ${item.qty} kg\n   - Rate: $${item.price}/kg\n   - Subtotal: $${sub.toFixed(2)}\n\n`;
+            });
+
+            message += `🚚 *Shipping Destination:* ${chosenShipping}\n`;
+            message += `💰 *Grand Total: $${grandTotal.toFixed(2)}*`;
+
+            window.open(`https://wa.me/${WHOLESALE_PHONE}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function renderApp() {
+            let navContainer = document.getElementById('mainNavTabs');
+            let pagesContainer = document.getElementById('pagesContainer');
+            let pTargetSelect = document.getElementById('p-target');
+            let txt = i18n[currentLang];
+            
+            navContainer.innerHTML = '';
+            pagesContainer.innerHTML = '';
+            if(pTargetSelect) pTargetSelect.innerHTML = '';
+
+            let adminMainTabsList = document.getElementById('adminMainTabsList');
+            if(adminMainTabsList) adminMainTabsList.innerHTML = '';
+
+            mainTabs.forEach((tab, idx) => {
+                let tabName = currentLang === 'ar' ? tab.name : (tab.nameEn || tab.name);
+                let btn = document.createElement('button');
+                btn.className = `nav-btn ${idx === 0 ? 'active' : ''}`;
+                btn.innerHTML = `<i class="fa-solid ${tab.icon || 'fa-folder'}"></i> ${tabName}`;
+                btn.onclick = (e) => switchPage(tab.id, e.currentTarget);
+                navContainer.appendChild(btn);
+
+                let pageDiv = document.createElement('div');
+                pageDiv.id = tab.id;
+                pageDiv.className = `page-view ${idx === 0 ? 'active' : ''}`;
+
+                if (tab.type === 'catalog') {
+                    pageDiv.innerHTML = `
+                        <div class="showroom-banner">
+                            <h2>${currentLang === 'ar' ? 'معارض ومستودعات الشركة' : 'Company Showrooms & Warehouses'}</h2>
+                            <p>${currentLang === 'ar' ? 'نقدم أجود أنواع الحبال والأنسجة الصناعية بخيارات الجملة والتصدير المباشر' : 'Offering top-quality industrial ropes & textiles for wholesale & export'}</p>
+                        </div>
+                        <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="text" class="searchInputClass" oninput="renderProducts()" placeholder="${txt.searchPlaceholder}"></div>
+                        <div class="filter-section"><div class="category-buttons catNavClass"></div></div>
+                        <div class="catalog catalogClass"></div>
+                    `;
+                } else if (tab.type === 'trade') {
+                    pageDiv.innerHTML = `
+                        <div class="trade-card">
+                            <h3 class="trade-title"><i class="fa-solid fa-globe"></i> ${tabName}</h3>
+                            <p class="product-desc">${currentLang === 'ar' ? 'نختص بتوفير واستيراد وتصدير كافة أنواع الأنسجة الخيطية والمواد الأولية والحبال الصناعية بالطلبيات الكبرى والحاويات المباشرة.' : 'Specialized in bulk yarn, raw textile materials, and industrial ropes export.'}</p>
+                        </div>
+                        <div class="tradeProductsListClass"></div>
+                        <div class="trade-card">
+                            <h3 class="trade-title"><i class="fa-solid fa-headset"></i> ${txt.exportContact}</h3>
+                            <a href="https://wa.me/963952172658" class="btn-gold" style="background:#25d366; color:#000; text-decoration:none; display:block; text-align:center; padding:10px; margin-top:10px;" target="_blank"><i class="fa-brands fa-whatsapp"></i> ${txt.exportWhatsappBtn}</a>
+                        </div>
+                    `;
+                } else if (tab.type === 'shipping') {
+                    pageDiv.innerHTML = `
+                        <div class="trade-card" style="margin-bottom:15px;">
+                            <h3 class="trade-title"><i class="fa-solid fa-truck-fast"></i> ${tabName}</h3>
+                            <p class="product-desc">${currentLang === 'ar' ? 'خيارات الشحن البري والتجاري المعتمدة والمتاحة لانطلاق البضائع والأنسجة إلى دول الجوار بكل أمان وسلاسة.' : 'Approved overland trade logistics routes for textile export to neighboring countries.'}</p>
+                        </div>
+                        <div class="shippingDestinationsListClass"></div>
+                    `;
+                } else {
+                    pageDiv.innerHTML = `
+                        <div class="trade-card" style="margin-bottom:15px;">
+                            <h3 class="trade-title"><i class="fa-solid fa-industry"></i> ${tabName}</h3>
+                            <p class="product-desc">${currentLang === 'ar' ? 'تستطيع زيارة معارضنا ومستودعاتنا الرئيسية للاطلاع على الإنتاج الفعلي واستلام الطلبيات المباشرة.' : 'Visit our main facilities to view live production lines and inspect cargo.'}</p>
+                        </div>
+                        <div class="trade-card">
+                            <h3 class="trade-title"><i class="fa-solid fa-location-dot" style="color:var(--danger-red);"></i> ${txt.factoryTitle}</h3>
+                            <p class="product-desc">${txt.factoryDesc}</p>
+                            <iframe class="map-box" src="${factoryMapUrl}" loading="lazy"></iframe>
+                        </div>
+                        <div class="trade-card" style="margin-top:15px;">
+                            <h3 class="trade-title"><i class="fa-solid fa-warehouse" style="color:var(--gold-bright);"></i> ${txt.warehouseTitle}</h3>
+                            <p class="product-desc">${txt.warehouseDesc}</p>
+                            <iframe class="map-box" src="${warehouseMapUrl}" loading="lazy"></iframe>
+                        </div>
+                        <div class="customSectionProdsClass" style="margin-top:15px;"></div>
+                    `;
+                }
+                pagesContainer.appendChild(pageDiv);
+
+                if(pTargetSelect) {
+                    let opt = document.createElement('option');
+                    opt.value = tab.id;
+                    opt.innerText = tabName;
+                    pTargetSelect.appendChild(opt);
+                }
+
+                if(adminMainTabsList) {
+                    let row = document.createElement('div');
+                    row.className = 'cat-item-row';
+                    row.innerHTML = `<span style="font-size:0.85rem; font-weight:bold;">${tabName}</span><div><button style="background:var(--gold-primary); border:none; padding:3px 8px; border-radius:4px; font-weight:bold; cursor:pointer;" onclick="editMainTab('${tab.id}')">${txt.editBtn}</button> ${mainTabs.length > 1 ? `<button style="background:var(--danger-red); color:#fff; border:none; padding:3px 8px; border-radius:4px; font-weight:bold; cursor:pointer;" onclick="deleteMainTab('${tab.id}')">${txt.deleteBtn}</button>` : ''}</div>`;
+                    adminMainTabsList.appendChild(row);
+                }
+            });
+
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderCategories() {
+            let catNavs = document.querySelectorAll('.catNavClass'), pCat = document.getElementById('p-cat'), adminCatList = document.getElementById('adminCatManageList');
+            let txt = i18n[currentLang];
+            if(pCat) pCat.innerHTML = '';
+            if(adminCatList) adminCatList.innerHTML = '';
+
+            catNavs.forEach(catNav => {
+                catNav.innerHTML = '';
+                categories.forEach(c => {
+                    let cName = currentLang === 'ar' ? c.name : (c.nameEn || c.name);
+                    let btn = document.createElement('button');
+                    btn.className = `btn-cat ${selectedCat === c.id ? 'active' : ''}`;
+                    btn.innerText = cName;
+                    btn.onclick = () => { selectedCat = c.id; renderCategories(); renderProducts(); };
+                    catNav.appendChild(btn);
+                });
+            });
+
+            categories.forEach(c => {
+                let cName = currentLang === 'ar' ? c.name : (c.nameEn || c.name);
+                if(c.id !== 'all' && pCat) {
+                    let opt = document.createElement('option'); opt.value = c.id; opt.innerText = cName; pCat.appendChild(opt);
+                    if (adminCatList) {
+                        let row = document.createElement('div'); row.className = 'cat-item-row';
+                        row.innerHTML = `<span style="font-size:0.85rem; font-weight:bold;">${cName}</span><div><button style="background:var(--gold-primary); border:none; padding:3px 8px; border-radius:4px; font-weight:bold; cursor:pointer;" onclick="editCategoryName('${c.id}')">${txt.editBtn}</button> <button style="background:var(--danger-red); color:#fff; border:none; padding:3px 8px; border-radius:4px; font-weight:bold; cursor:pointer;" onclick="deleteCategory('${c.id}')">${txt.deleteBtn}</button></div>`;
+                        adminCatList.appendChild(row);
+                    }
+                }
+            });
+        }
+
+        function calculateTotal(input, price, resultId) { 
+            let total = ((parseFloat(input.value) || 0) * price).toFixed(2);
+            let resEl = document.getElementById(resultId);
+            if(resEl) resEl.innerText = total; 
+        }
+
+        function renderProducts() {
+            let searchInputEl = document.querySelector('.searchInputClass');
+            let searchVal = searchInputEl ? searchInputEl.value.trim().toLowerCase() : '';
+            let txt = i18n[currentLang];
+
+            mainTabs.forEach(tab => {
+                if(tab.type === 'catalog') {
+                    let catalogEl = document.querySelector(`#${tab.id} .catalogClass`);
+                    if(!catalogEl) return;
+                    catalogEl.innerHTML = '';
+
+                    let tabProds = products.filter(p => p.target === tab.id);
+                    let filteredCatalog = selectedCat === 'all' ? tabProds : tabProds.filter(p => p.cat === selectedCat);
+                    if (searchVal) filteredCatalog = filteredCatalog.filter(p => (currentLang === 'ar' ? p.title : (p.titleEn||p.title)).toLowerCase().includes(searchVal));
+
+                    filteredCatalog.forEach(p => {
+                        let pTitle = currentLang === 'ar' ? p.title : (p.titleEn || p.title);
+                        let pColor = currentLang === 'ar' ? p.color : (p.colorEn || p.color);
+                        let pDesc = currentLang === 'ar' ? p.desc : (p.descEn || p.desc);
+
+                        let card = document.createElement('div'); card.className = 'card';
+                        card.innerHTML = `
+                            <img src="${p.media}" class="card-img">
+                            <h3 class="title">${pTitle}</h3>
+                            <div class="specs"><span class="spec-item">${txt.sizeLabel}${p.size}</span><span class="spec-item">${txt.colorLabel}${pColor}</span><span class="spec-item" style="color:var(--gold-bright);">${txt.stockLabel}${p.stock}${txt.kgUnit}</span></div>
+                            <div class="price-badge">${currentLang === 'ar' ? 'السعر:' : 'Price:'} $${p.price.toFixed(2)} ${txt.kgPrice}</div>
+                            <div class="product-desc">${pDesc}</div>
+                            <div class="calc-box">
+                                <label>${txt.minQtyLabel}</label>
+                                <div class="calc-row">
+                                    <input type="number" id="qty_input_${p.id}" value="100" min="100" oninput="calculateTotal(this, ${p.price}, 'tot_${p.id}')">
+                                </div>
+                                <div style="text-align:center; color:var(--gold-bright); margin-top:6px; font-weight:bold;">${txt.subTotalLabel}<span id="tot_${p.id}">${(100 * p.price).toFixed(2)}</span></div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn-add-cart" onclick="addToCart(${p.id}, '${pTitle}', ${p.price}, ${p.stock}, 'qty_input_${p.id}')"><i class="fa-solid fa-cart-plus"></i> ${txt.addCartBtn}</button>
+                                <button class="btn-share" onclick="shareProduct('${pTitle}')"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="admin-card-actions">
+                                <button class="btn-gold" style="flex:1; padding:6px; font-weight:bold;" onclick="openEditModal(${p.id})">${txt.editBtn}</button>
+                                <button class="btn-danger" style="border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;" onclick="deleteProduct(${p.id})">${txt.deleteBtn}</button>
+                            </div>
+                        `;
+                        catalogEl.appendChild(card);
+                    });
+
+                } else if(tab.type === 'trade' || tab.type === 'custom') {
+                    let tradeEl = document.querySelector(`#${tab.id} .tradeProductsListClass`) || document.querySelector(`#${tab.id} .customSectionProdsClass`);
+                    if(!tradeEl) return;
+                    let tabProds = products.filter(p => p.target === tab.id);
+                    if (searchVal) tabProds = tabProds.filter(p => (currentLang === 'ar' ? p.title : (p.titleEn||p.title)).toLowerCase().includes(searchVal));
+                    
+                    tabProds.forEach(p => {
+                        let pTitle = currentLang === 'ar' ? p.title : (p.titleEn || p.title);
+                        let pColor = currentLang === 'ar' ? p.color : (p.colorEn || p.color);
+                        let pDesc = currentLang === 'ar' ? p.desc : (p.descEn || p.desc);
+
+                        let card = document.createElement('div'); card.className = 'trade-card';
+                        card.innerHTML = `
+                            <img src="${p.media}" class="card-img">
+                            <h3 class="trade-title">${pTitle}</h3>
+                            <div class="specs"><span class="spec-item">${txt.sizeLabel}${p.size}</span><span class="spec-item">${txt.colorLabel}${pColor}</span></div>
+                            <div class="product-desc">${pDesc}</div>
+                            <div class="action-buttons">
+                                <a href="https://wa.me/963952172658?text=${encodeURIComponent(pTitle)}" class="btn-add-cart" style="background:#25d366; color:#000; text-decoration:none;" target="_blank"><i class="fa-brands fa-whatsapp"></i> ${txt.orderSamples}</a>
+                                <button class="btn-share" onclick="shareProduct('${pTitle}')"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                            <div class="admin-card-actions">
+                                <button class="btn-gold" style="flex:1; padding:6px; font-weight:bold;" onclick="openEditModal(${p.id})">${txt.editBtn}</button>
+                                <button class="btn-danger" style="border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;" onclick="deleteProduct(${p.id})">${txt.deleteBtn}</button>
+                            </div>
+                        `;
+                        tradeEl.appendChild(card);
+                    });
+
+                } else if(tab.type === 'shipping') {
+                    let shippingEl = document.querySelector(`#${tab.id} .shippingDestinationsListClass`);
+                    if(!shippingEl) return;
+                    shippingEl.innerHTML = '';
+
+                    shippingDestinations.forEach(dest => {
+                        let country = currentLang === 'ar' ? dest.country : dest.countryEn;
+                        let route = currentLang === 'ar' ? dest.route : dest.routeEn;
+                        let delivery = currentLang === 'ar' ? dest.delivery : dest.deliveryEn;
+                        let notes = currentLang === 'ar' ? dest.notes : dest.notesEn;
+
+                        let sCard = document.createElement('div'); sCard.className = 'shipping-country-card';
+                        sCard.innerHTML = `
+                            <div class="shipping-country-title">${country}</div>
+                            <div class="product-desc" style="margin-bottom:8px;"><b>${currentLang === 'ar' ? 'طريقة الشحن:' : 'Freight Route:'}</b> ${route}</div>
+                            <div class="product-desc" style="margin-bottom:8px;"><b>${currentLang === 'ar' ? 'نطاق الوصول:' : 'Coverage:'}</b> ${delivery}</div>
+                            <div style="background:var(--bg-dark); padding:8px; border-radius:6px; font-size:0.8rem; color:var(--gold-bright);">💡 ${notes}</div>
+                        `;
+                        shippingEl.appendChild(sCard);
+                    });
+                }
+            });
+        }
+
+        function openEditModal(id) {
+            let p = products.find(prod => prod.id === id); if (!p) return;
+            document.getElementById('m-prod-id').value = p.id; document.getElementById('m-title').value = p.title;
+            document.getElementById('m-price').value = p.price; document.getElementById('m-stock').value = p.stock;
+            document.getElementById('m-size').value = p.size; document.getElementById('m-color').value = p.color;
+            document.getElementById('m-desc').value = p.desc; document.getElementById('m-media-preview').src = p.media;
+            document.getElementById('m-media-base64').value = p.media;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+        
+        function saveProductEdits() {
+            let p = products.find(prod => prod.id === parseInt(document.getElementById('m-prod-id').value));
+            if (p) {
+                p.title = document.getElementById('m-title').value.trim() || p.title;
+                p.price = parseFloat(document.getElementById('m-price').value) || p.price;
+                p.stock = parseInt(document.getElementById('m-stock').value) || p.stock;
+                p.size = document.getElementById('m-size').value.trim() || p.size;
+                p.color = document.getElementById('m-color').value.trim() || p.color;
+                p.desc = document.getElementById('m-desc').value.trim() || p.desc;
+                p.media = document.getElementById('m-media-base64').value || p.media;
+                renderProducts(); closeEditModal(); alert('تم حفظ التعديلات بنجاح!');
+            }
+        }
+        function deleteProduct(id) { if (confirm("حذف هذا الصنف من الموقع؟")) { products = products.filter(p => p.id !== id); renderProducts(); } }
+
+        function addCategory() {
+            let name = document.getElementById('new-cat-name').value.trim();
+            if(name) { categories.push({ id: 'cat_' + Date.now(), name: name, nameEn: name }); document.getElementById('new-cat-name').value = ''; renderCategories(); alert('تمت إضافة التصنيف الفرعي!'); }
+        }
+
+        function addMainTab() {
+            let name = document.getElementById('new-main-tab-name').value.trim();
+            let type = document.getElementById('new-main-tab-type').value;
+            if(name) {
+                let newId = 'page_' + Date.now();
+                mainTabs.push({ id: newId, name: name, nameEn: name, type: type, icon: 'fa-folder-open' });
+                document.getElementById('new-main-tab-name').value = '';
+                renderApp(); alert('تمت إضافة القسم الرئيسي بنجاح!');
+            }
+        }
+
+        function addNewProduct() {
+            let target = document.getElementById('p-target').value, title = document.getElementById('p-title').value.trim();
+            if(!title) { alert('أدخل اسم الصنف!'); return; }
+            let targetTab = mainTabs.find(t => t.id === target);
+            let isCatalog = targetTab && targetTab.type === 'catalog';
+
+            products.push({
+                id: Date.now(), target: target, title: title, titleEn: title, cat: isCatalog ? (document.getElementById('p-cat').value || 'all') : 'all',
+                price: isCatalog ? (parseFloat(document.getElementById('p-price').value) || 0) : 0,
+                stock: isCatalog ? (parseInt(document.getElementById('p-stock').value) || 0) : 0,
+                size: document.getElementById('p-size').value.trim() || 'N/A', color: document.getElementById('p-color').value.trim() || 'N/A', colorEn: 'N/A',
+                media: document.getElementById('p-media-base64').value || 'https://via.placeholder.com/600x250/0d1722/f59e0b',
+                desc: document.getElementById('p-desc').value.trim() || 'No description.', descEn: 'No description.'
+            });
+            renderProducts(); alert('تم نشر الصنف في القسم بنجاح!');
+            switchPage(target, null);
+        }
+
+        function processStep1() {
+            if (document.getElementById('admin-email').value.trim().toLowerCase() === AUTHORIZED_EMAIL.toLowerCase()) {
+                generatedCode = Math.floor(1000 + Math.random() * 9000).toString(); alert(`[كود التحقق الخاص بك]: ${generatedCode}`);
+                document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block';
+            } else alert('الإيميل غير مخصص للإدارة!');
+        }
+        function processStep2() {
+            if (document.getElementById('admin-code').value.trim() === generatedCode) { document.getElementById('step2').style.display = 'none'; document.getElementById('step3').style.display = 'block'; }
+            else alert('كود التحقق خاطئ!');
+        }
+        function processStep3() {
+            if (document.getElementById('admin-pass').value.trim() === ADMIN_PASSWORD) {
+                alert('مرحباً بك يا معلم أحمد! تم دخول لوحة الإدارة.'); document.body.classList.add('admin-mode');
+                document.getElementById('authSection').style.display = 'none'; document.getElementById('adminQuickNav').style.display = 'block';
+                renderProducts(); closeDrawer();
+            } else alert('كلمة السر خاطئة!');
+        }
+        function logoutAdmin() {
+            document.body.classList.remove('admin-mode'); document.getElementById('authSection').style.display = 'block';
+            document.getElementById('adminQuickNav').style.display = 'none'; document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none'; document.getElementById('step3').style.display = 'none';
+            switchPage(mainTabs[0].id, null); renderProducts(); alert('تم تسجيل الخروج بنجاح.');
+        }
+    </script>
+</body>
+</html>
